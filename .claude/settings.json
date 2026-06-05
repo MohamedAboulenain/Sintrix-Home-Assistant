@@ -1,0 +1,23 @@
+{
+  "$comment": "Sintrix in-the-loop safety gate. ha-mcp READ tools are pre-allowed (in 'allow') for friction-free exploration. WRITE/REMOVE tools are intentionally LEFT OUT so they prompt for the integrator's approval via Claude Code's default behaviour. Do NOT add a blanket 'ask: [mcp__ha]' — an 'ask' rule overrides specific 'allow' rules and would make read tools prompt too. Server is named 'ha' in .mcp.json. If you rename it, update the 'mcp__ha__' prefixes below.",
+  "permissions": {
+    "allow": [
+      "mcp__ha__ha_get_overview",
+      "mcp__ha__ha_get_state",
+      "mcp__ha__ha_get_entity",
+      "mcp__ha__ha_search_entities",
+      "mcp__ha__ha_get_device",
+      "mcp__ha__ha_eval_template",
+      "mcp__ha__ha_get_history",
+      "mcp__ha__ha_get_logs",
+      "mcp__ha__ha_get_automation_traces",
+      "mcp__ha__ha_config_get_dashboard",
+      "mcp__ha__ha_config_list_dashboard_resources",
+      "mcp__ha__ha_config_get_automation",
+      "mcp__ha__ha_config_get_script",
+      "mcp__ha__ha_config_get_scene",
+      "mcp__ha__ha_get_skill_guide",
+      "mcp__ha__ha_search_tools"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+# Secrets — never commit real connection details
+.env
+.env.*
+!.env.example
+
+# Local Claude Code overrides
+.claude/settings.local.json
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
