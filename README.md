@@ -27,12 +27,11 @@ convention, decision, and as-built detail.
    (remote HTTP) instead? Swap the server block per the comments in `.mcp.json` and use the
    [ha-mcp setup wizard](https://homeassistant-ai.github.io/ha-mcp/setup/).
 
-3. **Install the HA best-practices skill** (one-time per machine):
-   ```
-   /plugin marketplace add homeassistant-ai/skills
-   /plugin install home-assistant-skills@home-assistant-skills
-   ```
-   then `/reload-plugins` (or restart Claude Code).
+3. **HA best-practices skill — already built in.** The `home-assistant-best-practices` skill
+   ships inside this template at `.claude/skills/` and loads automatically — there is nothing to
+   install, and it costs almost no context (only its trigger description is always loaded; the
+   rest loads on demand). To refresh it from upstream, re-copy `skills/home-assistant-best-practices/`
+   from [homeassistant-ai/skills](https://github.com/homeassistant-ai/skills) (MIT).
 
 4. **Start the project:** run `/onboard`. Sintrix connects, interviews you, discovers the house,
    and fills in `project/`. From there, drive it with `/program <domain>`.
@@ -93,6 +92,7 @@ CLAUDE.md            Sintrix's operating manual (auto-loaded)
 .claude/
   settings.json      read-allow / write-prompt permission gate
   commands/          the slash commands above
+  skills/            built-in home-assistant-best-practices skill (mandatory, auto-loaded)
 project/             THE PROJECT BRAIN (spec + everlasting memory)
   00-overview.md     house, scope, status            (always loaded)
   01-conventions.md  integrator profile + conventions (always loaded)

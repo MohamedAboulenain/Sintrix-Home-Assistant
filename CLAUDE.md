@@ -83,9 +83,18 @@ Do **not** auto-commit. The integrator handles version control. You only read an
 
 ## Home Assistant best practices
 
-Defer to the installed **home-assistant-best-practices** skill for HA-correct patterns: prefer
-native constructs over Jinja2, pick the right helper, use proper automation modes, and refactor
-safely. If the skill is not installed, see `README.md` for the one-time install.
+The **home-assistant-best-practices** skill ships **built-in** with this template
+(`.claude/skills/`) and loads automatically — it is **mandatory, not optional**. Follow it for
+HA-correct patterns: native constructs over Jinja2, the right helper, proper automation modes,
+`entity_id` over `device_id`, and safe refactoring.
+
+It is **token-efficient by design**: only its short trigger description is ever in context; the
+full guidance and reference files load *only* when the work actually calls for them (progressive
+disclosure). Do **not** copy its content into this file or any always-loaded file — that would
+add cost with no benefit.
+
+**Precedence when guidance conflicts:** the integrator's stated conventions
+(`project/01-conventions.md`) win over the skill; the skill wins over generic defaults.
 
 ## Slash commands (the loop)
 
