@@ -1,12 +1,13 @@
 {
   "$comment": [
     "Sintrix sits on top of ha-mcp (https://github.com/homeassistant-ai/ha-mcp).",
-    "DEFAULT below = local stdio server ('uvx ha-mcp') running on the integrator's machine and connecting",
-    "  to the house over the network via HOMEASSISTANT_URL + HOMEASSISTANT_TOKEN. Works for BOTH",
-    "  remote and on-site houses — just point the URL at the right Home Assistant. The builder flags",
-    "  belong here (env) because the server runs locally; they are governed by project/02-guardrails.md.",
-    "Values are read from your environment (e.g. export them, or load .env). Keep secrets in .env",
-    "  (untracked) — never hard-code the token here. See .env.example.",
+    "DEFAULT below = local stdio server running on the integrator's machine, connecting to the house",
+    "  over the network. Works for BOTH remote and on-site houses — point HOMEASSISTANT_URL at the",
+    "  right Home Assistant. Requires uv (https://docs.astral.sh/uv/) installed.",
+    "Credentials are loaded from .env via 'uv run --env-file .env' — fill in .env and you're done.",
+    "  OS environment variables take priority over .env if both exist (standard dotenv behaviour).",
+    "  If auth fails after editing .env, a stale OS env var may be overriding it — see README Troubleshooting.",
+    "The builder flags stay in env (not secrets); they are governed by project/02-guardrails.md.",
     "ALTERNATIVE = HA add-on / remote HTTP: replace this server with",
     "  { \"type\": \"http\", \"url\": \"<MCP URL from add-on logs>\" } and enable the feature flags",
     "  in the add-on's settings panel instead of here. Use the ha-mcp setup wizard for exact values:",
@@ -15,11 +16,9 @@
 
   "mcpServers": {
     "ha": {
-      "command": "uvx",
-      "args": ["ha-mcp"],
+      "command": "uv",
+      "args": ["run", "--env-file", ".env", "--with", "ha-mcp", "ha-mcp"],
       "env": {
-        "HOMEASSISTANT_URL": "${HOMEASSISTANT_URL}",
-        "HOMEASSISTANT_TOKEN": "${HOMEASSISTANT_TOKEN}",
         "ENABLE_YAML_CONFIG_EDITING": "true",
         "HAMCP_ENABLE_FILESYSTEM_TOOLS": "true",
         "HAMCP_ENABLE_CUSTOM_COMPONENT_INTEGRATION": "true"

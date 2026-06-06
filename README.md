@@ -18,14 +18,15 @@ convention, decision, and as-built detail.
 1. **Use this template** → "Use this template" on GitHub → create a private repo for the house
    (e.g. `villa-rossi`). Clone it and open in your IDE with Claude Code (paid plan).
 
-2. **Connect to the house's Home Assistant.** `.mcp.json` defaults to a **local stdio** ha-mcp
-   server (`uvx ha-mcp`) that connects over the network via `HOMEASSISTANT_URL` +
-   `HOMEASSISTANT_TOKEN` — this works for both **remote** and **on-site** houses; just point the URL
-   at the right HA. Copy `.env.example` → `.env`, set a dedicated least-privilege token, and make
-   sure the vars are in your environment when you launch Claude Code (the file explains how).
-   Requires [`uv`/`uvx`](https://docs.astral.sh/uv/) installed. Prefer the **ha-mcp add-on**
-   (remote HTTP) instead? Swap the server block per the comments in `.mcp.json` and use the
+2. **Connect to the house's Home Assistant.** Copy `.env.example` → `.env`, fill in
+   `HOMEASSISTANT_URL` and `HOMEASSISTANT_TOKEN` (HA → profile → Security → Long-lived access
+   tokens), then **restart Claude Code / VSCode fully** so the MCP server picks up the new values.
+   That's it — `.mcp.json` loads `.env` automatically via `uv run --env-file`. Requires
+   [`uv`](https://docs.astral.sh/uv/) installed. Works for both remote and on-site houses; just
+   point the URL at the right HA. Prefer the **ha-mcp add-on** (remote HTTP) instead? Swap the
+   server block per the comments in `.mcp.json` and use the
    [ha-mcp setup wizard](https://homeassistant-ai.github.io/ha-mcp/setup/).
+   → Auth not working? See [Troubleshooting](#troubleshooting) below.
 
 3. **HA best-practices skill — already built in.** The `home-assistant-best-practices` skill
    ships inside this template at `.claude/skills/` and loads automatically — there is nothing to
@@ -80,6 +81,40 @@ See [docs/workflow.md](docs/workflow.md) for the full picture.
 - **Least-privilege access.** Use a dedicated token per house and **revoke it at handover**
   (inspired by [sfox38/atm](https://github.com/sfox38/atm)).
 - **No auto-commit.** Sintrix edits files; you own git.
+
+---
+
+## Troubleshooting
+
+### `AUTH_INVALID_TOKEN` / MCP server won't connect
+
+Work through these in order:
+
+**1. Is the token actually valid?**
+Test it directly — bypass the MCP layer entirely:
+```powershell
+# PowerShell
+Invoke-RestMethod -Uri "http://homeassistant.local:8123/api/" `
+  -Headers @{ Authorization = "Bearer YOUR_TOKEN" }
+# Expected: @{message=API running.}   ← token is good
+# Got 401?  ← token is wrong or revoked — create a new one in HA
+```
+
+**2. Is a stale OS env var overriding your `.env`?**
+OS-level env vars take priority over `.env`. On Windows, a token set with `setx` or via
+System Properties persists invisibly across reboots and sessions:
+```powershell
+# Check User-scope and Machine-scope vars
+[Environment]::GetEnvironmentVariable("HOMEASSISTANT_TOKEN", "User")
+[Environment]::GetEnvironmentVariable("HOMEASSISTANT_TOKEN", "Machine")
+# If either returns an old token, clear it:
+[Environment]::SetEnvironmentVariable("HOMEASSISTANT_TOKEN", "", "User")
+```
+
+**3. Did you fully restart Claude Code / VSCode?**
+The MCP server inherits the environment at launch. Editing `.env` or changing env vars only
+reaches **newly spawned** processes — reconnecting the MCP server alone is not enough. Close
+VSCode entirely, reopen, then verify with `/mcp`.
 
 ---
 
