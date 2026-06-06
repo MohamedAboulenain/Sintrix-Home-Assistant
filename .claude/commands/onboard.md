@@ -14,9 +14,33 @@ conversationally — remember the integrator never edits files, so **you** write
    - If it's already filled (e.g. this integrator's standards were carried over), confirm it's
      still current rather than re-asking everything.
 
-2. **Verify connection.** Confirm ha-mcp is reachable (`/mcp` should show server `ha`). If not,
-   point them to `README.md` setup (fill `.env` from `.env.example`, pick remote vs add-on mode).
-   Once connected, run `ha_get_overview` to confirm access.
+2. **Verify connection — proactively.** Immediately call `ha_get_overview`. Three outcomes:
+
+   - **Success** → proceed. Note the HA version and URL for the record.
+
+   - **No ha-mcp tools available** (server didn't start) → `.env` likely missing or blank.
+     Tell the integrator: copy `.env.example` → `.env`, fill in `HOMEASSISTANT_URL` and
+     `HOMEASSISTANT_TOKEN`, then **fully restart Claude Code / VSCode** (not just reconnect).
+     Wait for them to confirm, then re-check.
+
+   - **AUTH_INVALID_TOKEN** → run this diagnosis before asking them to do anything else:
+     1. Tell them to run in a PowerShell terminal:
+        ```powershell
+        $env:HOMEASSISTANT_TOKEN
+        [Environment]::GetEnvironmentVariable("HOMEASSISTANT_TOKEN","User")
+        ```
+     2. If either prints a token → a stale OS env var is overriding `.env`. Give them the fix:
+        ```powershell
+        # Clear session-scope (current terminal)
+        Remove-Item Env:HOMEASSISTANT_TOKEN -ErrorAction SilentlyContinue
+        # Clear persistent User-scope (survives reboots)
+        [Environment]::SetEnvironmentVariable("HOMEASSISTANT_TOKEN","","User")
+        ```
+        Then: **fully restart Claude Code / VSCode**, come back and say "done".
+     3. If both print nothing → the token in `.env` itself is invalid. Tell them to create a
+        fresh long-lived token in HA (Profile → Security → Long-lived access tokens), update
+        `.env`, restart.
+     Wait for them to confirm, then re-check with `ha_get_overview`.
 
 3. **Capture the house basics** into `project/00-overview.md`: project name, end-client,
    location/timezone, connection mode, and which domains are in scope.
