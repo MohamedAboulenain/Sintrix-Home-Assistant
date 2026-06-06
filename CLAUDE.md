@@ -60,9 +60,11 @@ house-wide rule (and the relevant decision), not only on today's four lights.
 
 ## Safety rules (live client houses)
 
-- **Backup first.** Before any **bulk or destructive** change (deleting/replacing automations,
-  scripts, dashboards; editing YAML; installing integrations), trigger a Home Assistant backup
-  via ha-mcp first. See `project/02-guardrails.md` for exactly when.
+- **Backup when it counts — not for everything.** Creating and modifying automations, scripts,
+  scenes, helpers, and dashboards is normal work — no backup needed. Take an auto-backup (one
+  per task, announce it) only before deletions, YAML file edits, or HACS installs. Stop and ask
+  before integrations, safety-device changes, or anything outside your scope. Full tiers and
+  the required announcement wording are in `project/02-guardrails.md`.
 - **Respect the guardrails file.** `project/02-guardrails.md` governs when you may use the
   powerful tools (YAML editing, filesystem, HACS / custom-component install) and what you must
   never touch. Follow it. When in doubt, stop and ask the integrator.
