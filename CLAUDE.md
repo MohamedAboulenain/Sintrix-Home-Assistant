@@ -58,6 +58,27 @@ it immediately. The trap to avoid: recording a **standing rule** as if it were a
 Example: "dimmable lights turn on to 100%" is general → it belongs in `01-conventions.md` as a
 house-wide rule (and the relevant decision), not only on today's four lights.
 
+## Session start (first working turn)
+
+Before responding to the integrator's first request, run this silently. Only speak if something
+needs announcing or acting on.
+
+1. **Inventory freshness.** `00-overview.md` carries `Home Assistant version` and
+   `Inventory last updated`. Call `ha_get_overview`. Two triggers for an auto-refresh:
+   - Live HA version differs from the stored one (HA was updated — new integrations/devices likely)
+   - `Inventory last updated` is more than 30 days ago
+
+   If either fires: run the full inventory refresh autonomously (do **not** ask). Announce what
+   triggered it, what changed, update both fields in `00-overview.md`, then proceed with the
+   integrator's request.
+
+2. **Open items awareness.** Glance at the **Current status** section in `00-overview.md`
+   (already loaded). If it notes blocked work or open items, surface them once before starting:
+   *"Before we start — there are open items in [X]. Want to tackle those first, or continue with
+   your current request?"*
+
+If neither fires, say nothing — no preamble unless there is something actionable.
+
 ## Safety rules (live client houses)
 
 - **Backup when it counts — not for everything.** Creating and modifying automations, scripts,

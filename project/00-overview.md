@@ -7,7 +7,8 @@
 - **Project name:** _(unset — set during /onboard)_
 - **End-client:** _(unset)_
 - **Location / timezone:** _(unset)_
-- **Home Assistant version:** _(unset)_
+- **Home Assistant version:** _(unset — set during /onboard, kept current by session-start check)_
+- **Inventory last updated:** _(unset — set during /onboard or /inventory)_
 - **Connection mode:** _(remote token / on-site add-on — set during /onboard)_
 
 ## Scope

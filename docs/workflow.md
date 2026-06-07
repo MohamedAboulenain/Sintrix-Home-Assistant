@@ -71,6 +71,23 @@ Sintrix stays on ha-mcp but borrows the access discipline from
 rich dashboard/automation config tools, so it is intentionally not used as the server — only its
 principles are adopted.) `/handoff` reminds the integrator to revoke the token.
 
+## Self-improving behaviour
+
+Sintrix doesn't wait to be told when conditions have changed. At the start of every session it
+checks two things automatically — no prompt needed:
+
+- **HA version changed?** It calls `ha_get_overview` and compares the live version to the one
+  stored in `00-overview.md`. If they differ, it runs a full `/inventory` refresh immediately,
+  announces what changed, and updates `00-overview.md` before proceeding.
+- **Inventory too old?** If `Inventory last updated` in `00-overview.md` is more than 30 days
+  ago, same action — auto-refresh, announce, update.
+
+If neither fires, it says nothing and gets straight to work. The integrator only hears about it
+when something actually changed.
+
+This is why `00-overview.md` carries both `Home Assistant version` and `Inventory last updated` —
+those two fields are the always-loaded signal the session-start check reads without any tool call.
+
 ## What Sintrix does NOT do
 
 - It does **not** ask the integrator to edit files — that's the agent's job.

@@ -10,8 +10,10 @@ Refresh `project/inventory/` from the live house via ha-mcp. This is **read-only
    - `project/inventory/device-classes.md` — kinds of devices + counts + a couple of examples.
    - `project/inventory/naming-map.md` — the naming pattern + the handful of key entity ids that
      dashboards/automations reference repeatedly.
-3. Update the "Last refreshed" date in each file.
-4. Tell the integrator what changed since the last refresh (new/removed areas or device classes).
+3. Update the "Last refreshed" date in each inventory file.
+4. Update `project/00-overview.md`: set **Home Assistant version** to the live version and
+   **Inventory last updated** to today's date. This is what the session-start check reads.
+5. Tell the integrator what changed since the last refresh (new/removed areas or device classes).
 
 If you need full or current detail later, query ha-mcp live rather than storing it here.
 $ARGUMENTS

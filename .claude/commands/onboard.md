@@ -51,7 +51,8 @@ conversationally — remember the integrator never edits files, so **you** write
 
 5. **Discover the house** via ha-mcp and write the **curated** summary (not a full dump) into
    `project/inventory/areas.md`, `device-classes.md`, and `naming-map.md`. Use `ha_get_overview`,
-   `ha_search_entities`. Note the naming pattern you observe.
+   `ha_search_entities`. Note the naming pattern you observe. Then update `project/00-overview.md`:
+   set **Home Assistant version** to the live version and **Inventory last updated** to today's date.
 
 6. **Seed domain intent.** For each in-scope domain, ask what they want and record it in the
    matching `project/domains/*.md` **Intent** section.
